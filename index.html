@@ -68,19 +68,20 @@ nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:fl
 .hdr-phone:hover span{color:var(--g)}
 
 /* ——— HERO ——— */
-/* --gh — единый масштаб правой композиции: и девушка, и слово «ОПТИКИ»
-   считаются от него, поэтому слово заходит за девушку одинаково на любом
-   экране. 69vw — страховка для узких высоких окон, чтобы девушка не
-   разрослась на всю ширину. */
-.hero{--gh:min(100vh,69vw);min-height:100vh;position:relative;overflow:hidden;background:#fff url('BG/FON.png') center top/cover no-repeat;display:flex;align-items:flex-end}
-/* Фоновый текст САЛОН ОПТИКИ — за девушкой. Правый край привязан к девушке:
-   9.4% — её отступ справа, 0.2495·--gh — сдвиг слова относительно её левого края. */
-.hero-bg-text{position:absolute;top:23%;right:calc(9.4% + var(--gh)*.2495);left:auto;transform:translateY(-50%);z-index:1;pointer-events:none;line-height:.82;white-space:nowrap;text-align:center}
-.hbt-sm{display:block;font-family:var(--fh);font-size:calc(var(--gh)*.0704);font-weight:800;color:var(--g);text-transform:lowercase;letter-spacing:.025em}
-.hbt-lg{display:block;font-family:var(--fh);font-size:calc(var(--gh)*.176);font-weight:900;color:var(--td);text-transform:uppercase;letter-spacing:-.025em}
-/* Девушка — поверх текста, высота задаёт размер, пропорции держит aspect-ratio */
-.hero-img{position:absolute;right:9.4%;bottom:0;width:auto;height:var(--gh);aspect-ratio:858/987;z-index:2}
-.hero-img img{width:100%;height:100%;object-fit:contain;object-position:right bottom}
+.hero{min-height:100vh;position:relative;overflow:hidden;background:#fff url('BG/FON.png') center top/cover no-repeat;display:flex;align-items:flex-end}
+/* Фоновый текст САЛОН ОПТИКИ — по центральной оси экрана, как меню в шапке.
+   Кегль задан чистым vw без потолка: иначе на широком мониторе слово
+   переставало расти и заходило за девушку заметно меньше. */
+.hero-bg-text{position:absolute;top:23%;left:50%;right:auto;transform:translate(-50%,-50%);z-index:1;pointer-events:none;line-height:.82;white-space:nowrap;text-align:center}
+.hbt-sm{display:block;font-family:var(--fh);font-size:4.4vw;font-weight:800;color:var(--g);text-transform:lowercase;letter-spacing:.025em}
+.hbt-lg{display:block;font-family:var(--fh);font-size:11vw;font-weight:900;color:var(--td);text-transform:uppercase;letter-spacing:-.025em}
+/* Девушка — поверх текста. Ширина в % от экрана, как и кегль слова, поэтому
+   заход «ОПТИКИ» за девушку одинаков на любом размере окна. 56.25vw —
+   её собственная высота при такой ширине: на широких окнах высота упирается
+   в 100% и низ срезает кромка экрана, на высоких окнах она стоит на нижней
+   кромке целиком, без обреза по бокам. */
+.hero-img{position:absolute;right:9.4%;bottom:0;width:48.9%;height:min(100%,56.25vw);z-index:2;overflow:hidden}
+.hero-img img{display:block;width:100%;height:auto}
 .hero-ew,.hero h1,.hero-txt,.hero-act{position:relative;z-index:3}
 /* Левый контент — поверх всего */
 .hero-left{position:relative;z-index:3;width:100%;padding:0 0 100px;min-height:100vh;display:flex;align-items:flex-end}
@@ -107,8 +108,8 @@ nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:fl
   .hero-txt{display:none}
   .hero h1{margin-bottom:0}
   /* девушка — в потоке, между заголовком и кнопками */
-  .hero-img{position:relative;right:auto;bottom:auto;top:auto;width:min(75vw,400px);height:auto;aspect-ratio:auto;margin:3px auto 3px;z-index:2;opacity:1}
-  .hero-img img{width:100%;height:auto;object-fit:contain;object-position:center}
+  .hero-img{position:relative;right:auto;bottom:auto;top:auto;width:min(75vw,400px);height:auto;overflow:visible;margin:3px auto 3px;z-index:2;opacity:1}
+  .hero-img img{width:100%;height:auto;min-height:0;object-fit:contain;object-position:center}
   .hero-act{flex-direction:column;align-items:center;gap:10px}
   .hero-act .btn{width:65%;min-width:232px;max-width:330px;justify-content:center;padding:9px 22px;font-size:15.5px}
 }
