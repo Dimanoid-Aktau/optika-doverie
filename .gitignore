@@ -2,7 +2,7 @@
 *.cdr
 *.psd
 *.webp
-!BG/GIRL-MOB.webp
+!BG/GIRL.webp
 /*.jpg
 /*.png
 /Референс*
