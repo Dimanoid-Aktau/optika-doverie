@@ -70,17 +70,21 @@ nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:fl
 /* ——— HERO ——— */
 .hero{min-height:100vh;position:relative;overflow:hidden;background:#fff url('BG/FON.png') center top/cover no-repeat;display:flex;align-items:flex-end}
 /* Фоновый текст САЛОН ОПТИКИ — по центральной оси экрана, как меню в шапке.
-   Кегль задан чистым vw без потолка: иначе на широком мониторе слово
-   переставало расти и заходило за девушку заметно меньше. */
-.hero-bg-text{position:absolute;top:23%;left:50%;right:auto;transform:translate(-50%,-50%);z-index:1;pointer-events:none;line-height:.82;white-space:nowrap;text-align:center}
-.hbt-sm{display:block;font-family:var(--fh);font-size:4.4vw;font-weight:800;color:var(--g);text-transform:lowercase;letter-spacing:.025em}
-.hbt-lg{display:block;font-family:var(--fh);font-size:11vw;font-weight:900;color:var(--td);text-transform:uppercase;letter-spacing:-.025em}
+   Кегль (font-size на блоке) подгоняет скрипт: ширина «ОПТИКИ» всегда 43.3%
+   экрана, поэтому заход за девушку одинаков и при смене окна, и при смене
+   языка. 9.53vw — то же значение до запуска скрипта.
+   top привязан не к высоте экрана, а к самой девушке: 15.25vw — пока её низ
+   срезает кромка экрана, вторая ветка — когда она целиком стоит на нижней
+   кромке (высокие узкие окна). */
+.hero-bg-text{position:absolute;top:max(15.25vw,100% - 40.65vw);left:50%;right:auto;transform:translate(-50%,-50%);z-index:1;pointer-events:none;line-height:.82;white-space:nowrap;text-align:center;font-size:9.53vw}
+.hbt-sm{display:block;font-family:var(--fh);font-size:.4526em;font-weight:800;color:var(--g);text-transform:lowercase;letter-spacing:.025em}
+.hbt-lg{display:block;font-family:var(--fh);font-size:1em;font-weight:900;color:var(--td);text-transform:uppercase;letter-spacing:-.025em}
 /* Девушка — поверх текста. Ширина в % от экрана, как и кегль слова, поэтому
    заход «ОПТИКИ» за девушку одинаков на любом размере окна. 56.25vw —
    её собственная высота при такой ширине: на широких окнах высота упирается
    в 100% и низ срезает кромка экрана, на высоких окнах она стоит на нижней
    кромке целиком, без обреза по бокам. */
-.hero-img{position:absolute;right:9.4%;bottom:0;width:48.9%;height:min(100%,56.25vw);z-index:2;overflow:hidden}
+.hero-img{position:absolute;right:3.8%;bottom:0;width:48.6%;height:min(100%,55.9vw);z-index:2;overflow:hidden}
 .hero-img img{display:block;width:100%;height:auto}
 .hero-ew,.hero h1,.hero-txt,.hero-act{position:relative;z-index:3}
 /* Левый контент — поверх всего */
@@ -1129,6 +1133,31 @@ body.nav-open .fab-wrap{opacity:0;pointer-events:none;transition:opacity .2s}
 </footer>
 
 <script>
+// ——— ПЕРВЫЙ ЭКРАН: ширина слова «ОПТИКИ» = 43.3% экрана ———
+// Кегль подгоняется под ширину, а не задан жёстко: тогда заход слова за
+// девушку одинаков и при смене размера окна, и при смене языка, где слово
+// другой длины. Мобильную версию функция не трогает.
+window.fitHeroWord = (function () {
+  const box = document.getElementById('heroBgText');
+  if (!box) return function () {};
+  const lg = box.querySelector('.hbt-lg');
+  const TARGET = 0.433;   // доля ширины экрана
+  const PROBE = 200;      // кегль пробного замера, px
+  function fit() {
+    if (window.innerWidth <= 900) { box.style.fontSize = ''; return; }
+    box.style.fontSize = PROBE + 'px';
+    const rg = document.createRange();
+    rg.selectNodeContents(lg);
+    const w = rg.getBoundingClientRect().width;
+    if (w > 0) box.style.fontSize = (PROBE * window.innerWidth * TARGET / w).toFixed(2) + 'px';
+  }
+  fit();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  let t;
+  window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(fit, 80); });
+  return fit;
+})();
+
 // ——— МОБИЛЬНОЕ МЕНЮ ———
 (function () {
   const burger = document.getElementById('burger');
