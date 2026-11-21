@@ -54,6 +54,7 @@ a{text-decoration:none;color:inherit}
 .burger.on span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .burger.on span:nth-child(2){opacity:0}
 .burger.on span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.hdr.nav-on{z-index:420}
 .nav-ov{position:fixed;inset:0;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .3s;z-index:380}
 .nav-ov.on{opacity:1;pointer-events:auto}
 
@@ -85,7 +86,10 @@ a{text-decoration:none;color:inherit}
 /* галерея */
 .pr-gal{background:#fff;border-radius:20px;padding:16px;box-shadow:0 6px 30px rgba(0,0,0,.08);position:sticky;top:96px}
 .pr-main{position:relative;border-radius:14px;overflow:hidden;background:#fff;aspect-ratio:4/3}
+.pr-main{cursor:zoom-in}
 .pr-main img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.2,.6,.2,1)}
+.pr-zoom{position:absolute;right:14px;bottom:14px;z-index:2;display:flex;align-items:center;gap:7px;padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 3px 14px rgba(0,0,0,.14);font-family:var(--fh);font-size:12px;font-weight:700;color:var(--td);pointer-events:none}
+.pr-zoom svg{width:15px;height:15px;stroke:var(--g);fill:none;stroke-width:2.2}
 .pr-main:hover img{transform:scale(1.045)}
 .pr-badge{position:absolute;left:16px;top:16px;min-width:40px;height:40px;padding:0 12px;border-radius:999px;background:var(--r);color:#fff;font-family:var(--fh);font-size:13px;font-weight:800;letter-spacing:.5px;display:flex;align-items:center;justify-content:center;z-index:2;box-shadow:0 4px 14px rgba(227,30,36,.34)}
 .pr-thumbs{display:flex;gap:12px;margin-top:14px}
@@ -119,6 +123,18 @@ a{text-decoration:none;color:inherit}
 .pr-sal-c{background:var(--ow);border-radius:14px;padding:18px 20px}
 .pr-sal-c strong{display:block;font-family:var(--fh);font-size:14.5px;font-weight:800;margin-bottom:5px}
 .pr-sal-c span{display:block;font-size:12.5px;color:var(--tm);line-height:1.6}
+
+/* ——— ФОТО НА ВЕСЬ ЭКРАН ——— */
+.lb{position:fixed;inset:0;z-index:900;background:rgba(8,20,13,.95);display:flex;align-items:center;justify-content:center;padding:54px 12px;opacity:0;transition:opacity .25s ease}
+.lb.on{opacity:1}
+.lb[hidden]{display:none}
+.lb img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;border-radius:10px;background:#fff;cursor:zoom-in}
+.lb.zoom{overflow:auto;align-items:flex-start;justify-content:flex-start;padding:0;-webkit-overflow-scrolling:touch}
+.lb.zoom img{max-width:none;max-height:none;width:230%;height:auto;margin:auto;border-radius:0;cursor:zoom-out}
+.lb-x{position:fixed;top:14px;right:14px;z-index:2;width:46px;height:46px;border:none;border-radius:50%;background:rgba(10,30,18,.55);backdrop-filter:blur(6px);color:#fff;font-size:26px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background var(--tr)}
+.lb-x:hover{background:var(--g)}
+.lb-hint{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:2;padding:8px 16px;border-radius:999px;background:rgba(10,30,18,.55);backdrop-filter:blur(6px);white-space:nowrap;font-family:var(--fh);font-size:12px;font-weight:600;letter-spacing:.3px;color:rgba(255,255,255,.82)}
+body.lb-open{overflow:hidden}
 
 /* ——— ДРУГИЕ МОДЕЛИ ——— */
 .more{padding:0 0 86px}
@@ -192,7 +208,7 @@ a{text-decoration:none;color:inherit}
 @media(max-width:600px){
   .pr-gal{padding:10px;border-radius:16px}
   .pr-info{padding:26px 20px;border-radius:16px}
-  .pr-main{aspect-ratio:1/1}
+  .pr-main{aspect-ratio:4/3}
   .pr-thumb{flex:0 0 76px;height:58px}
   .pr-act .btn{flex:1 1 100%}
   .pr-sal{grid-template-columns:1fr}

@@ -59,6 +59,10 @@ window.I18N = (function () {
 
     "Другие модели каталога":{"kk":"Каталогтың басқа модельдері","en":"More from the catalog"},
     "Весь каталог":{"kk":"Толық каталог","en":"Full catalog"},
+    "Открыть фото":{"kk":"Фотоны ашу","en":"Open photo"},
+    "Нажмите на фото, чтобы увеличить":{"kk":"Үлкейту үшін фотоны басыңыз","en":"Tap the photo to zoom in"},
+    "Нажмите на фото, чтобы уменьшить":{"kk":"Кішірейту үшін фотоны басыңыз","en":"Tap the photo to zoom out"},
+    "Закрыть":{"kk":"Жабу","en":"Close"},
     "Фото модели":{"kk":"Модельдің фотосы","en":"Product photo"},
     "Фото в образе":{"kk":"Киілген күйдегі фото","en":"Worn photo"},
 
@@ -125,7 +129,9 @@ window.I18N = (function () {
   var nav = document.getElementById('nav');
   var ov = document.getElementById('navOv');
   if (!burger || !nav || !ov) return;
+  var hdr = document.querySelector('.hdr');
   function setMenu(open) {
+    if (hdr) hdr.classList.toggle('nav-on', open);
     burger.classList.toggle('on', open);
     nav.classList.toggle('on', open);
     ov.classList.toggle('on', open);
@@ -139,19 +145,85 @@ window.I18N = (function () {
   nav.addEventListener('click', function (e) { if (e.target.tagName === 'A') setMenu(false); });
 })();
 
-/* ——— ГАЛЕРЕЯ ——— */
+/* ——— ГАЛЕРЕЯ И ПРОСМОТР ФОТО НА ВЕСЬ ЭКРАН ——— */
 (function () {
   var main = document.getElementById('prMain');
   if (!main) return;
+  var img = main.querySelector('img');
+  var src = main.querySelector('source');
+  var T = function (ru) { return (window.I18N && window.I18N.t) ? window.I18N.t(ru) : ru; };
+
+  /* переключение миниатюр */
   document.querySelectorAll('.pr-thumb').forEach(function (t) {
     t.addEventListener('click', function () {
       document.querySelectorAll('.pr-thumb').forEach(function (x) { x.classList.remove('on'); });
       t.classList.add('on');
-      var src = t.dataset.full, web = t.dataset.webp || '';
-      main.querySelector('source').srcset = web;
-      main.querySelector('img').src = src;
+      if (src) src.srcset = t.dataset.webp || '';
+      img.src = t.dataset.full;
     });
   });
+
+  /* подсказка «нажмите, чтобы увеличить» поверх фото */
+  var hint = document.createElement('span');
+  hint.className = 'pr-zoom';
+  hint.innerHTML = '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'
+    + '<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.2-3.2M11 8.4v5.2M8.4 11h5.2"/></svg>'
+    + '<span>Открыть фото</span>';
+  main.appendChild(hint);
+
+  /* полноэкранный просмотр */
+  var lb = document.createElement('div');
+  lb.className = 'lb';
+  lb.id = 'lb';
+  lb.hidden = true;
+  lb.innerHTML = '<button type="button" class="lb-x" aria-label="Закрыть">&times;</button>'
+    + '<img alt="">'
+    + '<span class="lb-hint">Нажмите на фото, чтобы увеличить</span>';
+  document.body.appendChild(lb);
+  var lbImg = lb.querySelector('img');
+
+  function open() {
+    lbImg.src = img.currentSrc || img.src;
+    lbImg.alt = img.alt;
+    lb.hidden = false;
+    document.body.classList.add('lb-open');
+    requestAnimationFrame(function () { lb.classList.add('on'); });
+  }
+  function close() {
+    lb.classList.remove('on', 'zoom');
+    document.body.classList.remove('lb-open');
+    setTimeout(function () { lb.hidden = true; lbImg.removeAttribute('src'); }, 250);
+  }
+
+  main.addEventListener('click', open);
+  lb.addEventListener('click', close);
+
+  /* тап по самому фото — увеличить и вернуть обратно, фон закрывает просмотр */
+  lbImg.addEventListener('click', function (e) {
+    e.stopPropagation();
+    var z = lb.classList.toggle('zoom');
+    if (z) {
+      lb.scrollLeft = (lb.scrollWidth - lb.clientWidth) / 2;
+      lb.scrollTop = (lb.scrollHeight - lb.clientHeight) / 2;
+    }
+    syncLang();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && !lb.hidden) close();
+  });
+
+  /* подписи в выбранном языке */
+  function syncLang() {
+    hint.querySelector('span').textContent = T('Открыть фото');
+    lb.querySelector('.lb-hint').textContent = lb.classList.contains('zoom')
+      ? T('Нажмите на фото, чтобы уменьшить')
+      : T('Нажмите на фото, чтобы увеличить');
+    lb.querySelector('.lb-x').setAttribute('aria-label', T('Закрыть'));
+  }
+  document.querySelectorAll('.lang button').forEach(function (b) {
+    b.addEventListener('click', function () { setTimeout(syncLang, 0); });
+  });
+  syncLang();
 })();
 
 /* ——— ПОЯВЛЕНИЕ БЛОКОВ ——— */
