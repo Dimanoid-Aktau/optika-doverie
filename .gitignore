@@ -3,6 +3,7 @@
 *.psd
 *.webp
 !BG/GIRL.webp
+!img/pr-*.webp
 /*.jpg
 /*.png
 /Референс*
