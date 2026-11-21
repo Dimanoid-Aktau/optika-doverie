@@ -95,8 +95,8 @@ nav{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:fl
 .hero-bg-text{position:relative;z-index:3;pointer-events:none;line-height:.82;white-space:nowrap;text-align:left;font-size:8.5vw;padding-left:calc(max(30px,4.7vw) + 100vw - 100%);margin:1.6vw 0 2.05vw}
 .hbt-sm{display:block;font-family:var(--fh);font-size:.4526em;font-weight:800;color:var(--g);text-transform:lowercase;letter-spacing:.034em;margin-bottom:.4em}
 .hbt-lg{display:block;font-family:var(--fh);font-size:1em;font-weight:900;color:var(--td);text-transform:uppercase;letter-spacing:.0217em}
-/* Девушка — поверх текста, исходный широкий PNG (BG/GIRL-WIDE.webp, холст
-   1800x1005, сама фигура занимает в нём 46.33%..94.22% по ширине). Размеры
+/* Девушка — поверх текста, исходный BG/GIRL.png (холст 1800x1005, сама
+   фигура занимает в нём 46.33%..94.22% по ширине). Размеры
    подобраны так, чтобы фигура встала ровно в 46.55%..96.55% ширины экрана;
    холст при этом выходит за правый край и обрезается самим первым экраном. */
 .hero-img{position:absolute;right:-2.59%;top:max(-3.444vw,100% - 58.544vw);width:104.41%;aspect-ratio:1800/1005;height:auto;z-index:2;overflow:hidden}
@@ -638,7 +638,7 @@ body.nav-open .fab-wrap{opacity:0;pointer-events:none;transition:opacity .2s}
         <div class="hero-img">
           <picture>
             <source media="(max-width:900px)" srcset="BG/GIRL.webp">
-            <img src="BG/GIRL-WIDE.webp" alt="Девушка в очках">
+            <img src="BG/GIRL.png" alt="Девушка в очках">
           </picture>
         </div>
         <div class="hero-act">

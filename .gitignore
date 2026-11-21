@@ -3,7 +3,6 @@
 *.psd
 *.webp
 !BG/GIRL.webp
-!BG/GIRL-WIDE.webp
 /*.jpg
 /*.png
 /Референс*
